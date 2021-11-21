@@ -1,62 +1,64 @@
-# Task #1
-# Напишіть клас User, який матиме такі поля:
-# - first_name
-# - last_name
-# - email
+class User
 
-# 1) Створіть методи 'getter' і 'setter' для всіх полів.
-# 2) Напишіть метод 'full_name', який повинен повертати ім'я та прізвище
-# 3) Створіть метод 'is_valid_email?', який перевірить правильність електронної пошти та поверне логічні значення. 
-# Використовуйте регулярний вираз /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-# - true if the email is correct
-# - false if email is incorrect
-# 4) Create 'errors; який повертає масив помилок у поля
-# first_name - 1. if the value is empty     якщо значення порожнє
-#              2. if the value is not a string     якщо значення не є рядком
-#              3. value must be at least three characters    значення має бути не менше трьох символів
-#
-# first_name - 1. if the value is empty
-#              2. if the value is not a string
-#              3. value must be at least three characters
-#
-# email      - 1. if the value is empty
-#            - 2. if the value is not a string
-#            - 3. value must be validated through the regular expression from the third point  значення має бути перевірено за допомогою регулярного виразу з третього пункту
-#
-#
-# Example: Приклад
-# u1 = User.new(first_name: 'John', last_name: nil, email: 'Doe.Johngmailgmail.com')
-# puts "First name: #{u1.first_name}" # => John
-# puts "Last name: #{u1.last_name}" # =>
-# puts "Email: #{u1.email}" # => Doe.Johngmailgmail.com
-# puts "Full name: #{u1.full_name}" # => John Do
-# puts "Valid_email: #{u1.is_valid_email?}" # => false
-# puts "User is valid: #{u1.valid?}" # => false
-# puts "Errors: #{u1.errors}" # => ["last_name can not be empty", "last_name must be a string", "email is invalid"]
-# puts ''\
-#
-# u1.last_name = 'Doe'
-# u1.email = 'Doe.Johngmail@gmail.com'
-# puts "Valid_email: #{u1.is_valid_email?}" # => false
-# puts "User is valid: #{u1.valid?}" # => false
-# puts "Errors: #{u1.errors}" # => ["last_name can not be empty", "last_name must be a string", "email is invalid"]
-#
-# Console output: Вихід консолі
-# First name: John
-# Last name:
-#        Email: Doe.Johngmailgmail.com
-# Full name: John
-# Valid_email: false
-# User is valid: false
-# Errors: ["last_name can not be empty", "last_name must be a string", "email is invalid"]
-#
-# Valid_email: true
-# User is valid: true
-# Errors: []
+	attr_accessor :first_name, :last_name, :email
 
+	def initialize(first_name, last_name, email)
+		@first_name = first_name
+		@last_name = last_name
+		@email = email
+	end
 
+	def full_name
+		"#{first_name} #{last_name}"
+	end
 
-# Requirements:
-# > Each task in a separate file
-# > Does not copy the task description to the file
-# > Use only English language
+	def is_valid_email?
+		email =~/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i ? true : false
+	end
+
+	def errors
+		@errors = []
+		validate_first_name
+		validate_last_name
+		validate_email
+		@errors
+	end
+
+	def valid?
+		errors.empty?
+	end
+
+	private
+
+	def validate_first_name
+		@errors << 'first_name can not be empty' if @first_name.nil? || @first_name.empty?
+        @errors << 'first_name can not a String' unless @first_name.instance_of?(String)
+        @errors << 'first_name very short' if @first_name.to_s.size < 3
+	end
+
+	def validate_last_name
+		@errors << 'last_name can not be empty' if @last_name.nil? || @last_name.empty?
+		@errors << 'last_name can not a String' unless @last_name.instance_of?(String)
+        @errors << 'last_name very short' if @last_name.to_s.size < 3
+	end
+
+	def validate_email
+		@errors << 'email can not be empty' if email.nil? || @email.empty?
+        @errors << 'email can not a String' unless @email.instance_of?(String)
+        @errors << 'email very short' if @email.to_s.size < 3
+	end
+end
+
+u1 = User.new(first_name: 'John', last_name: nil, email: 'Doe.Johngmailgmail.com')
+puts "First name: #{u1.first_name}" 
+puts "Last name: #{u1.last_name}"
+puts "Email: #{u1.email}" 
+puts "Full name: #{u1.full_name}"
+puts "Valid_email: #{u1.is_valid_email?}" 
+puts "User is valid: #{u1.valid?}" 
+puts ''\
+
+u1.last_name = 'Doe'
+u1.email = 'Doe.Johngmail@gmail.com'
+puts "Valid_email: #{u1.is_valid_email?}" 
+puts "Errors: #{u1.errors}"
